@@ -24,6 +24,7 @@ router.get('/debug', async (req, res) => {
 
         res.json({
             basePath,
+            dirname: __dirname,
             rootFiles,
             postsDir,
             postsFiles,
