@@ -91,8 +91,8 @@
 
                 // Fetch and render markdown content
                 const contentResponse = await fetch(`/api/post/${post.filename}`);
-                const markdown = await contentResponse.text();
-                const html = marked.parse(markdown);
+                const data = await contentResponse.json();
+                const html = marked.parse(data.content);
 
                 document.getElementById('post-content').innerHTML = html;
             } catch (error) {
