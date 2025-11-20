@@ -1,6 +1,7 @@
 [build]
   publish = "."
   functions = "netlify/functions"
+  included_files = ["posts/**"]
 
 [[redirects]]
   from = "/api/*"

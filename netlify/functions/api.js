@@ -5,11 +5,13 @@ const fs = require('fs').promises;
 
 const app = express();
 
+const router = express.Router();
+
 // Get the base path - in Netlify, this will be the project root
 const basePath = process.cwd();
 
 // API endpoint to fetch markdown files
-app.get('/api/post/:filename', async (req, res) => {
+router.get('/post/:filename', async (req, res) => {
     try {
         const filename = req.params.filename;
         const filePath = path.join(basePath, 'posts', filename);
@@ -22,7 +24,7 @@ app.get('/api/post/:filename', async (req, res) => {
 });
 
 // API endpoint to fetch posts metadata
-app.get('/api/posts', async (req, res) => {
+router.get('/posts', async (req, res) => {
     try {
         const postsPath = path.join(basePath, 'posts', 'posts.json');
         const content = await fs.readFile(postsPath, 'utf-8');
@@ -32,6 +34,10 @@ app.get('/api/posts', async (req, res) => {
         res.status(500).json({ error: 'Failed to load posts', details: error.message });
     }
 });
+
+// Mount the router
+app.use('/.netlify/functions/api', router);  // For Netlify
+app.use('/api', router);                     // For local development
 
 // Export the serverless function
 module.exports.handler = serverless(app);
