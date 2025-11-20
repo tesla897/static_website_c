@@ -1,0 +1,21 @@
+{
+  "name": "static-site-anti",
+  "version": "1.0.0",
+  "description": "A modern static website with blog functionality",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "static-site",
+    "blog",
+    "markdown"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "marked": "^11.1.1"
+  }
+}

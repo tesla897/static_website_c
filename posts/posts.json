@@ -1,0 +1,20 @@
+[
+    {
+        "slug": "welcome",
+        "filename": "welcome.md",
+        "title": "Welcome to My Blog",
+        "description": "An introduction to this blog and what you can expect to find here. Learn about my journey and the topics I'll be covering.",
+        "date": "November 18, 2025",
+        "author": "Your Name",
+        "emoji": "👋"
+    },
+    {
+        "slug": "getting-started-web-dev",
+        "filename": "getting-started.md",
+        "title": "Getting Started with Modern Web Development",
+        "description": "A comprehensive guide to starting your journey in web development. Covering essential tools, technologies, and best practices.",
+        "date": "November 17, 2025",
+        "author": "Your Name",
+        "emoji": "🚀"
+    }
+]

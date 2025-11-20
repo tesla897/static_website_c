@@ -1,0 +1,1 @@
+# Static site HTML, CSS, JS and simple Node libraries

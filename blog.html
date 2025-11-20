@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - Modern Static Site</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <a href="index.html" class="nav-logo">MyPortfolio</a>
+                <button class="nav-toggle" aria-label="Toggle navigation">☰</button>
+                <ul class="nav-links">
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="about.html" class="nav-link">About</a></li>
+                    <li><a href="blog.html" class="nav-link active">Blog</a></li>
+                    <li><a href="faq.html" class="nav-link">FAQ</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Blog Hero -->
+    <section class="hero" style="min-height: 50vh;">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Blog</h1>
+                <p class="hero-subtitle">
+                    Thoughts, tutorials, and insights on web development and design
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Posts -->
+    <section class="section">
+        <div class="container">
+            <div id="blog-posts" class="blog-grid">
+                <!-- Blog posts will be dynamically loaded here -->
+                <div class="card" style="text-align: center; padding: var(--space-2xl);">
+                    <p style="color: var(--color-text-secondary);">Loading posts...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2025 MyPortfolio. Built with passion and modern web technologies.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script type="module" src="js/blog.js"></script>
+</body>
+
+</html>

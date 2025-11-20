@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Post - Modern Static Site</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <a href="index.html" class="nav-logo">MyPortfolio</a>
+                <button class="nav-toggle" aria-label="Toggle navigation">☰</button>
+                <ul class="nav-links">
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="about.html" class="nav-link">About</a></li>
+                    <li><a href="blog.html" class="nav-link active">Blog</a></li>
+                    <li><a href="faq.html" class="nav-link">FAQ</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Post Header -->
+    <section class="section" style="padding-top: calc(var(--header-height) + var(--space-2xl));">
+        <div class="container">
+            <div class="post-header">
+                <h1 id="post-title" class="post-title">Loading...</h1>
+                <div id="post-meta" class="post-meta"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Post Content -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <div class="post-content" id="post-content">
+                <p style="text-align: center; color: var(--color-text-secondary);">Loading post...</p>
+            </div>
+
+            <div style="text-align: center; margin-top: var(--space-2xl);">
+                <a href="blog.html" class="btn btn-secondary">← Back to Blog</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2025 MyPortfolio. Built with passion and modern web technologies.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module">
+        import { marked } from '/node_modules/marked/lib/marked.esm.js';
+
+        // Get post slug from URL parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const postSlug = urlParams.get('post');
+
+        if (!postSlug) {
+            document.getElementById('post-content').innerHTML =
+                '<p style="text-align: center;">Post not found. <a href="blog.html">Return to blog</a></p>';
+        } else {
+            loadPost(postSlug);
+        }
+
+        async function loadPost(slug) {
+            try {
+                // Fetch post metadata
+                const postsResponse = await fetch('/api/posts');
+                const posts = await postsResponse.json();
+                const post = posts.find(p => p.slug === slug);
+
+                if (!post) {
+                    throw new Error('Post not found');
+                }
+
+                // Update post header
+                document.getElementById('post-title').textContent = post.title;
+                document.getElementById('post-meta').innerHTML = `
+          <span>${post.date}</span> • <span>${post.author}</span>
+        `;
+                document.title = `${post.title} - Modern Static Site`;
+
+                // Fetch and render markdown content
+                const contentResponse = await fetch(`/api/post/${post.filename}`);
+                const data = await contentResponse.json();
+                const html = marked.parse(data.content);
+
+                document.getElementById('post-content').innerHTML = html;
+            } catch (error) {
+                console.error('Error loading post:', error);
+                document.getElementById('post-content').innerHTML =
+                    '<p style="text-align: center; color: var(--color-error);">Failed to load post. <a href="blog.html">Return to blog</a></p>';
+            }
+        }
+    </script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>
