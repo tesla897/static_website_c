@@ -83,33 +83,59 @@
 
         async function loadPost(slug) {
             try {
-                // Fetch post metadata
-                const postsResponse = await fetch('/api/posts');
-                const posts = await postsResponse.json();
-                const post = posts.find(p => p.slug === slug);
+                // 1. Check for cached post content
+                const cacheKey = `post_${slug}`;
+                const cachedData = sessionStorage.getItem(cacheKey);
 
-                if (!post) {
-                    throw new Error('Post not found');
+                if (cachedData) {
+                    const { post, content } = JSON.parse(cachedData);
+                    renderPost(post, content);
+                    // Optional: Re-validate in background
+                    fetchPostAndUpdateCache(slug, cacheKey);
+                } else {
+                    await fetchPostAndUpdateCache(slug, cacheKey);
                 }
-
-                // Update post header
-                document.getElementById('post-title').textContent = post.title;
-                document.getElementById('post-meta').innerHTML = `
-          <span>${post.date}</span> • <span>${post.author}</span>
-        `;
-                document.title = `${post.title} - Modern Static Site`;
-
-                // Fetch and render markdown content
-                const contentResponse = await fetch(`/api/post/${post.filename}`);
-                const data = await contentResponse.json();
-                const html = marked.parse(data.content);
-
-                document.getElementById('post-content').innerHTML = html;
             } catch (error) {
                 console.error('Error loading post:', error);
                 document.getElementById('post-content').innerHTML =
                     '<p style="text-align: center; color: var(--color-error);">Failed to load post. <a href="blog.html">Return to blog</a></p>';
             }
+        }
+
+        async function fetchPostAndUpdateCache(slug, cacheKey) {
+            // Fetch post metadata
+            const postsResponse = await fetch('/api/posts');
+            const posts = await postsResponse.json();
+            const post = posts.find(p => p.slug === slug);
+
+            if (!post) {
+                throw new Error('Post not found');
+            }
+
+            // Fetch post content
+            const contentResponse = await fetch(`/api/post/${post.filename}`);
+            const data = await contentResponse.json();
+
+            // Cache both metadata and content
+            sessionStorage.setItem(cacheKey, JSON.stringify({
+                post,
+                content: data.content
+            }));
+
+            renderPost(post, data.content);
+        }
+
+        function renderPost(post, content) {
+            // Update post header
+            document.getElementById('post-title').textContent = post.title;
+            document.getElementById('post-meta').innerHTML = `
+                <span>${post.date}</span> • <span>${post.author}</span>
+            `;
+            document.title = `${post.title} - Modern Static Site`;
+
+            // Render markdown content
+            const html = marked.parse(content);
+            document.getElementById('post-content').innerHTML = html;
         }
     </script>
     <script src="js/main.js"></script>
