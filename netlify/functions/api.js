@@ -42,8 +42,6 @@ router.get('/post/:filename', async (req, res) => {
         const filePath = path.join(basePath, 'posts', filename);
         console.log(`Attempting to read file: ${filePath}`);
         const content = await fs.readFile(filePath, 'utf-8');
-        // Cache for 5 minutes in browser, 1 hour in CDN
-        res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=3600');
         res.json({ content });
     } catch (error) {
         console.error('Error reading post file:', error);
@@ -61,8 +59,6 @@ router.get('/posts', async (req, res) => {
         const postsPath = path.join(basePath, 'posts', 'posts.json');
         console.log(`Attempting to read posts metadata: ${postsPath}`);
         const content = await fs.readFile(postsPath, 'utf-8');
-        // Cache for 5 minutes in browser, 1 hour in CDN
-        res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=3600');
         res.json(JSON.parse(content));
     } catch (error) {
         console.error('Error reading posts.json:', error);
