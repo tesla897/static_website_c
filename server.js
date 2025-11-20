@@ -11,6 +11,30 @@ app.use(express.static(__dirname));
 // Serve node_modules for client-side libraries
 app.use('/node_modules', express.static(path.join(__dirname, 'node_modules')));
 
+// Debug endpoint to check file structure
+app.get('/api/debug', async (req, res) => {
+  try {
+    const rootFiles = await fs.readdir(__dirname);
+    const postsDir = path.join(__dirname, 'posts');
+    let postsFiles = [];
+    try {
+      postsFiles = await fs.readdir(postsDir);
+    } catch (e) {
+      postsFiles = [`Error accessing posts dir: ${e.message}`];
+    }
+
+    res.json({
+      basePath: __dirname,
+      rootFiles,
+      postsDir,
+      postsFiles,
+      env: process.env
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // API endpoint to fetch markdown files
 app.get('/api/post/:filename', async (req, res) => {
   try {

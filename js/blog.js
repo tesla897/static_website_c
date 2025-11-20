@@ -33,9 +33,11 @@ async function loadBlogPosts() {
 
   } catch (error) {
     console.error('Error loading blog posts:', error);
+    const errorMessage = error.message || 'Unknown error';
     container.innerHTML = `
       <div class="card" style="text-align: center; padding: var(--space-2xl);">
-        <p style="color: var(--color-error);">Failed to load blog posts. Please try again later.</p>
+        <p style="color: var(--color-error);">Failed to load blog posts. <br>Error: ${errorMessage}</p>
+        <p style="font-size: 0.8em; margin-top: 10px;">Check console for details.</p>
       </div>
     `;
   }
