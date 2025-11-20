@@ -1,7 +1,5 @@
 // Blog functionality - Load and display blog posts
 
-import { marked } from '/node_modules/marked/lib/marked.esm.js';
-
 // Load blog posts on blog.html page
 if (document.getElementById('blog-posts')) {
   loadBlogPosts();
