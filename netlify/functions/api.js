@@ -5,14 +5,18 @@ const fs = require('fs').promises;
 
 const app = express();
 
+// Get the base path - in Netlify, this will be the project root
+const basePath = process.cwd();
+
 // API endpoint to fetch markdown files
 app.get('/api/post/:filename', async (req, res) => {
     try {
         const filename = req.params.filename;
-        const filePath = path.join(__dirname, '../../posts', filename);
+        const filePath = path.join(basePath, 'posts', filename);
         const content = await fs.readFile(filePath, 'utf-8');
         res.json({ content });
     } catch (error) {
+        console.error('Error reading post file:', error);
         res.status(404).json({ error: 'Post not found' });
     }
 });
@@ -20,11 +24,12 @@ app.get('/api/post/:filename', async (req, res) => {
 // API endpoint to fetch posts metadata
 app.get('/api/posts', async (req, res) => {
     try {
-        const postsPath = path.join(__dirname, '../../posts', 'posts.json');
+        const postsPath = path.join(basePath, 'posts', 'posts.json');
         const content = await fs.readFile(postsPath, 'utf-8');
         res.json(JSON.parse(content));
     } catch (error) {
-        res.status(500).json({ error: 'Failed to load posts' });
+        console.error('Error reading posts.json:', error);
+        res.status(500).json({ error: 'Failed to load posts', details: error.message });
     }
 });
 
